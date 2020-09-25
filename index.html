@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>袭选数据</title>
+    <link rel="stylesheet" href="index.css" >
+</head>
+<body>
+
+<div id="indexStatic">
+    <h3>袭客数据云平台</h3>
+    <div class="tab">
+        <div class="tabItems pageSelected" onclick="eventFun.jump('index/index.html',this)">首页</div>
+        <div class="tabItems" onclick="eventFun.jump('regitData/index.html',this)">注册数据</div>
+        <div class="tabItems" onclick="eventFun.jump('onlineData/index.html',this)">上线数据</div>
+        <div class="tabItems" onclick="eventFun.jump('deliverData/index.html',this)">传播数据</div>
+        <div class="tabItems" onclick="eventFun.jump('buyData/index.html',this)">购买数据</div>
+        <div class="tabItems" onclick="eventFun.jump('childData/index.html',this)">分销数据</div>
+    </div>
+    <p id="date">加载中...</p>
+</div>
+
+<div id="content"></div>
+<script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-gl/dist/echarts-gl.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts-stat/dist/ecStat.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/dataTool.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/china.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/map/js/world.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts/dist/extension/bmap.min.js"></script>
+
+<script>
+    //名词解释
+    /*
+    * legend：图例
+    * series.symbol：线条的上的圆点
+    * tooltip：悬停在图标上弹出的信息
+    * label:图表里面每个图显示的文字
+    * */
+    let eventFun={
+        jump:function(url,e){
+            $('.tabItems').attr('class','tabItems');
+            $(e).attr('class','tabItems pageSelected');
+            $('#content').load('pages/'+url);
+        }
+    }
+    $(()=>{
+        let timer=setInterval(()=>{
+            let date=new Date();
+            let d=date.toString();
+            $('#date').html(d.split('GMT')[0]);
+        },1000)
+        $('#content').load('pages/index/index.html');
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,371 @@
+<style>
+    #dataTab{
+        display: flex;flex-direction: row;justify-content: center;align-items: center;color:#2E2E2E;
+    }
+    #dataTab>div{
+        width:150px;height:100px;display: flex;flex-direction: column;justify-content: center;align-items: center;
+        margin:10px;
+    }
+    #dataTab h2{
+        color:#2E2E2E;
+        margin:10px 0;
+        font-weight: bold;
+    }
+    #dataTab p{
+        width: 100%;
+        text-align: center;
+        margin: 0;
+        color: #2E2E2E;
+        font-size: 0.5rem;
+    }
+
+    #onlineContent{padding:0 0px;}
+    #onlineTitle{display: flex;flex-direction: row;justify-content: space-between;align-items: center;}
+    #fourSmoothLineDiv{display: flex;flex-wrap: wrap;align-items: center;}
+    #fourSmoothLineDiv>div{width: 46%;height:300px;margin:40px 2% 0 2%;}
+    #smoothLine1,#smoothLine2,#smoothLine3,#smoothLine4{position:relative;}
+    #fourSmoothLineDiv #smoothLine2{
+        height:500px;
+    }
+
+    .selectedBtn,.unselectedBtn{
+        margin:0 10px;
+        text-align: center;
+    }
+    .selectedBtn{
+        font-size: 14px;
+        color:#FF7A56;
+        border:1px solid #FF7A56;
+        width: 44px;
+        height:23px;
+        line-height: 25px;
+        border-radius: 12.5px;
+    }
+    .unselectedBtn{
+        font-size: 14px;
+        color:#868689
+    }
+</style>
+
+<div id="onlineContent">
+    <div id="dataTab">
+        <div>
+            <h2 class="dataNum">298</h2>
+            <p>本周新增</p>
+        </div>
+        <div>
+            <h2 class="dataNum">2577</h2>
+            <p>累计注册总数</p>
+        </div>
+    </div>
+    <div id="fourSmoothLineDiv">
+        <div id="smoothLine1"></div>
+        <div id="smoothLine2"></div>
+
+        <div style="position: relative;">
+            <div style="position: absolute;top:0;right:50px;z-index: 1;display: flex;flex-direction: row;justify-content: center;align-items: center;">
+                <div class="selectedBtn" onclick="selectDate(this)">日</div>
+                <div class="unselectedBtn" onclick="selectDate(this)">周</div>
+            </div>
+            <div id="smoothLine3" style="height:300px;"></div>
+        </div>
+
+
+<!--        <div id="smoothLine4"></div>-->
+    </div>
+</div>
+
+<script>
+    var myChart1 = echarts.init(document.getElementById('smoothLine1'));
+    var myChart2 = echarts.init(document.getElementById('smoothLine2'));
+    var myChart3 = echarts.init(document.getElementById('smoothLine3'));
+    // var myChart4 = echarts.init(document.getElementById('smoothLine4'));
+
+
+    //选择周/日
+    function selectDate(e){
+        $(e).parent().children('div').attr('class','unselectedBtn');
+        $(e).attr('class','selectedBtn');
+    }
+
+
+
+    //当日新增参数
+    var  option1 = {
+        title:{
+            show:true,
+            text:[
+                '{a|当日新增} 298'
+            ],
+            subtext:'较昨日 ↓ 0.9%',
+            subtextStyle:{
+                c:{
+                    padding:10,
+                    fontSize:10
+                }
+            },
+            textStyle:{
+                color:'#2E2E2E',
+                rich:{
+                    a: {
+                        // padding:10,
+                        fontSize: 14
+                    },
+                    b:{
+                        // padding:[0,10],
+                         fontSize: 14
+                    },
+
+                }
+            },
+        },
+        tooltip:{
+            show:true,
+            backgroundColor:'#fff',
+            textStyle: {
+                color:'#505D6F'
+            },
+            trigger:'axis',
+            axisPointer:{
+                type:'none'
+            }
+        },
+        xAxis: {
+            type: 'category',
+            data: ['00:00','02:00','04:00','06:00','08:00','10:00','12:00','14:00','16:00','18:00','20:00','22:00'],
+            axisLabel:{
+                color:'#999999'
+            },
+            axisLine:{
+                show:true,
+                lineStyle:{
+                    color:'#EDEDED',
+                }
+            },
+        },
+        yAxis: {
+            type: 'value',
+            min:200,
+            axisLabel:{
+                show:true
+            },
+            splitLine:{
+                show:false,
+            },
+            axisTick:{
+                show:false,
+            },
+            axisLine:{
+                show:false
+            }
+        },
+        series: [{
+            data: [321,423,344,745,624,643,544,455,964,689,369,975],
+            type: 'line',
+            symbol:'none',
+            smooth: 0.4,
+            smoothMonotone:'x',
+            itemStyle:{
+                borderWidth:10,
+                borderColor:'rgba(257,107,106,0.3)',
+                color:'rgba(257,107,106,1)'
+            },
+            lineStyle:{
+                color:'#fd6d6a'
+            },
+            areaStyle:{
+                color:{
+                    type: 'linear',
+                    x: 0,
+                    y: 0,
+                    x2: 1,
+                    y2: 1,
+                    colorStops: [{
+                        offset: 0, color: 'rgba(255, 143, 102, 0)' // 0% 处的颜色
+                    }, {
+                        offset: 1, color: 'rgba(255, 143, 102, 1)' // 100% 处的颜色
+                    }],
+                }
+            }
+        }]
+    };
+    //初始化
+    myChart1.setOption(option1, true);
+
+
+
+    //地图参数
+    var currentPlace='北京';//默认地址
+    var option2 = {
+        title: {
+            text: '地区分销员销售结构（省）',
+            subtext:'新增地区 {a|'+currentPlace+'}',
+            left: '10%',
+            textStyle: {
+                fontSize:'normal',
+                fontWeight:'normal',
+                color: '#333'
+            },
+            subtextStyle:{
+                fontSize:'normal',
+                fontWeight:'normal',
+                color: '#333',
+                rich:{
+                    a:{
+                        color:'#FF6C40',
+                        padding:[0,10]
+                    }
+                }
+            }
+        },
+        geo: {
+            map: 'china',
+            roam:false,
+            scaleLimit:{
+                min:1.1,
+                max:1.5
+            },
+            itemStyle: {
+                areaColor: '#FBF5F2',
+                borderType:'dotted',
+                //地图选中颜色
+                emphasis: {
+                    areaColor: '#FF6C40'
+                }
+            }
+        }
+    };
+    myChart2.setOption(option2, true);
+    //设置默认地点
+    myChart2.dispatchAction({
+        type:'geoSelect',
+        name:currentPlace
+    });
+    //绑定点击事件
+    myChart2.on('click', function (params) {
+        // 控制台打印数据的名称
+        console.log(params);
+        //取消之前选中的
+        myChart2.dispatchAction({
+            type:'geoUnSelect',
+            name:currentPlace
+        });
+        //选中点击的
+        myChart2.dispatchAction({
+            type:'geoSelect',
+            name:params.name
+        });
+        //更新地址
+        currentPlace=params.name;
+        //更新副标题
+        myChart2.setOption({
+            title:{
+                subtext:'新增地区 {a|'+currentPlace+'}'
+            }
+        })
+    });
+
+
+    var  option3 = {
+        title:{
+            show:true,
+            text:[
+                '{a|本月新增} 298'
+            ],
+            subtext:'较昨日 ↓ 0.9%',
+            subtextStyle:{
+                c:{
+                    padding:10,
+                    fontSize:10
+                }
+            },
+            textStyle:{
+                color:'#2E2E2E',
+                rich:{
+                    a: {
+                        // padding:10,
+                        fontSize: 14
+                    },
+                    b:{
+                        // padding:[0,10],
+                        fontSize: 14
+                    },
+
+                }
+            },
+        },
+        tooltip:{
+            show:true
+        },
+        xAxis: {
+            type: 'category',
+            data: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31],
+            axisLabel:{
+                color:'#999999'
+            },
+            splitLine:{
+                show:false,
+                lineStyle:{
+                    color:'#EDEDED'
+                }
+            },
+            axisTick:{
+                show:false
+            },
+            axisLine:{
+                show:true,
+                symbol:['none','arrow'],
+                lineStyle:{
+                    color:'rgba(255, 108, 64, 0.4)',
+                }
+            },
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel:{
+                color:'#999999'
+            },
+            splitLine:{
+                show:false,
+                lineStyle:{
+                    color:'rgba(255, 108, 64, 0.4)'
+                }
+            },
+            axisTick:{
+                show:false
+            },
+            axisLine:{
+                show:true,
+                symbol:['none','arrow'],
+                lineStyle:{
+                    color:'rgba(255, 108, 64, 0.4)',
+                }
+            },
+        },
+        series: [{
+            data: [321,423,344,745,624,643,544,455,964,689,369,975,567,678,321,423,643,544,455,344,745,624,643,544,455,964,689,369,975,567,678],
+            type: 'bar',
+            barWidth:4,
+            showBackground: false,
+            itemStyle: {
+                color:{
+                    type: 'linear',
+                    x: 1,
+                    y: 1,
+                    x2: 0,
+                    y2: 0,
+                    colorStops: [{
+                        offset: 0, color: 'rgba(255, 143, 102, 0)' // 0% 处的颜色
+                    }, {
+                        offset: 1, color: 'rgba(255, 143, 102, 1)' // 100% 处的颜色
+                    }],
+                },
+                // barBorderRadius:[5,5,0,0]
+            }
+        }]
+    };
+
+
+    myChart3.setOption(option3, true);
+    // myChart4.setOption(option, true);
+</script>
